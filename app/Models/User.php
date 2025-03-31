@@ -3,15 +3,26 @@
 namespace App\Models;
 
 use Laravel\Scout\Searchable;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory;
-    use Searchable;
+    use HasFactory, Notifiable, Searchable;
 
     public $timestamps = false;
+
+    protected $fillable = [
+        'name',
+        'email', // Asegúrate de tener un campo de email si usas autenticación
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
     public function toSearchableArray()
     {
@@ -36,5 +47,4 @@ class User extends Model
     {
         return $this->belongsTo(TypeIdentification::class);
     }
-
 }
