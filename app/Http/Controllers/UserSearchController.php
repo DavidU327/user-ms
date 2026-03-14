@@ -10,16 +10,19 @@ class UserSearchController extends Controller
 {
     public function search(UserSearchRequest $userSearchRequest)
     {
+
         $searchTerm = $userSearchRequest->search;
 
-        $collectors = User::with('user')
-            ->whereHas('user', function ($query) use ($searchTerm) {
+        $user = User::where('rol_id', 2)
+            ->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'LIKE', "%{$searchTerm}%")
-                    ->orWhere('email', 'LIKE', "%{$searchTerm}%");
+                    ->orWhere('identification', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('phone', 'LIKE', "%{$searchTerm}%");
             })
             ->whereNull('deleted_at')
-            ->paginate(10); // Paginar correctamente
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
 
-        return UserResource::collection($collectors);
+        return UserResource::collection($user);
     }
 }
