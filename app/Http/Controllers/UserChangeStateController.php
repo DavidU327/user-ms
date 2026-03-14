@@ -21,9 +21,17 @@ class UserChangeStateController extends Controller
         $state = $this->getState($user->state_id);
         $user->state_id = $state;
         $user->save();
+        $infoState = State::find($state);
         $data = [
-            'message' => 'Usuario actualizado',
-            'order' => UserResource::make($user),
+            'message' => 'Cambio de estado correctamente',
+            'data' => [
+                'id' => $user->id,
+                'state' => [
+                    'id' => $infoState->id,
+                    'name' => $infoState->name,
+                    'color' => $infoState->color,
+                ],
+            ],
             'code' => 200,
         ];
         return response()->json($data);
