@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eab139361a651a139034117b4c6f922f",
+    "content-hash": "e626a6142c9ae2fef028cdb3fd1b6a72",
     "packages": [
         {
             "name": "azure-oss/storage",
@@ -8742,7 +8742,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.2"
+        "php": "^8.4"
     },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
