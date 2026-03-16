@@ -9,6 +9,7 @@ class State extends Model
 
     const ENABLED = 'Habilitado';
     const DISABLED = 'Deshabilitado';
+    const DELETE_USER = 'Eliminado';
 
     public function users(){
         return $this->hasMany(User::class);

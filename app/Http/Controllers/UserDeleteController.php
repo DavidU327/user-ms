@@ -14,14 +14,17 @@ class UserDeleteController extends Controller
     {
         $user->deleted_at = Carbon::now()->format('Y-m-d');
         if ($user->image !== null) {
-            $fileName = 'images/' . 'users' . '/' . basename($user->image);
-            if (Storage::disk('public')->exists($fileName)) {
-                Storage::disk('public')->delete($fileName);
+            $parsedUrl = parse_url($user->image, PHP_URL_PATH);
+            $container = '/' . config('filesystems.disks.azure.container') . '/';
+            $relativePath = ltrim(str_replace($container, '', $parsedUrl), '/');
+            if (Storage::disk('azure')->exists($relativePath)) {
+                Storage::disk('azure')->delete($relativePath);
             }
         }
         $user->image = null;
-        $state = State::where('name', State::DISABLED)->first();
+        $state = State::where('name', State::DELETE_USER)->first();
         $user->state_id = $state->id;
+        $user->deleted_at = Carbon::now()->format('Y-m-d');
         $user->save();
         $data = [
             'message' => 'Usuario eliminado',
