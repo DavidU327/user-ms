@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\State;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Storage;
 
 class UserDeleteController extends Controller
