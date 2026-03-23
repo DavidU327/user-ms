@@ -8,23 +8,32 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UserUpdateRequest;
+use Illuminate\Support\Str;
 
 
 class UserUpdateController extends Controller
 {
 
-    public function saveStorage($image, $imageOld, $route): string
+    public function saveStorage($image, $route, $oldFileUrl): string
     {
-        if ($imageOld !== null) {
-            $oldImagePath = 'images/' . $route . '/' . basename($imageOld);
-            if (Storage::disk('public')->exists($oldImagePath)) {
-                Storage::disk('public')->delete($oldImagePath);
+        if ($oldFileUrl) {
+            $parsedUrl = parse_url($oldFileUrl, PHP_URL_PATH);
+            $container = '/' . config('filesystems.disks.azure.container') . '/';
+            $relativePath = ltrim(str_replace($container, '', $parsedUrl), '/');
+            if (Storage::disk('azure')->exists($relativePath)) {
+                Storage::disk('azure')->delete($relativePath);
             }
         }
-        $imageName = $image->getClientOriginalName();
-        $nameRoute = 'images/'. $route .'/';
-        $image->storeAs($nameRoute, $imageName, 'public');
-        $url = Storage::disk('public')->url($nameRoute . $imageName);
+
+        $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $image->getClientOriginalExtension();
+        $safeName = Str::slug($originalName, '_');
+        $imageName = $safeName . '.' . $extension;
+        $nameRoute = 'images/' . $route . '/';
+        Storage::disk('azure')->putFileAs($nameRoute, $image, $imageName);
+        $url = rtrim(config('filesystems.disks.azure.url'), '/') . '/' .
+            config('filesystems.disks.azure.container') . '/' .
+            $nameRoute . $imageName;
         return $url;
     }
 
@@ -34,8 +43,10 @@ class UserUpdateController extends Controller
         try {
             $user->name = $userUpdateRequest->name;
             $user->phone = $userUpdateRequest->phone;
-            $image = $this->saveStorage($userUpdateRequest->images, $user->image, 'users');
-            $user->image = $image;
+            if ($userUpdateRequest->hasFile('images')) {
+                $image = $this->saveStorage($userUpdateRequest->images, 'users', $user->image);
+                $user->image = $image;
+            }
             $user->save();
             DB::commit();
             $userResource = UserResource::make($user);
