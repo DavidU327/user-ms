@@ -12,6 +12,8 @@ Route::middleware(['auth.jwt', 'role:'.Rol::ADMIN])->group(function () {
 
 });
 
+Route::get('user/{user}', '\App\Http\Controllers\UserIndexController@show')->name('user.show'); //Mostrar usuario por id
+
 //Users
 Route::middleware(['auth.jwt', 'role:'.Rol::USER])->group(function () {
     Route::patch('user/{user}', '\App\Http\Controllers\UserUpdateController@update')->name('user.update'); //Actualizar usuario

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserShowResource;
 
 class UserIndexController extends Controller
 {
@@ -14,5 +15,10 @@ class UserIndexController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate(10);
         return UserResource::collection($users);
+    }
+
+    public function show(User $user)
+    {
+        return new UserShowResource($user);
     }
 }
