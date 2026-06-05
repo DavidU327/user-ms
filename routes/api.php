@@ -10,7 +10,9 @@ Route::middleware(['auth.jwt', 'role:'.Rol::ADMIN])->group(function () {
     Route::post('search', '\App\Http\Controllers\UserSearchController@search')->name('user.search'); //Buscar usuario
     Route::delete('delete_user/{user}', '\App\Http\Controllers\UserDeleteController@delete')->name('user.delete'); //Eliminar usuario
     Route::get('user/{user}', '\App\Http\Controllers\UserIndexController@show')->name('user.show'); //Mostrar usuario por id
+    Route::patch('user-points/{user}', '\App\Http\Controllers\UserUpdatePointsController@updatePoints')->name('user.updatePoints'); //Actualizar puntos
 });
+
 //Users
 Route::middleware(['auth.jwt', 'role:'.Rol::USER])->group(function () {
     Route::patch('user/{user}', '\App\Http\Controllers\UserUpdateController@update')->name('user.update'); //Actualizar usuario
