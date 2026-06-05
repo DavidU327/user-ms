@@ -20,7 +20,7 @@ class UserUpdatePointsController extends Controller
             $user->save();
             DB::commit();
             Http::baseUrl(config('services.level_service.url'))
-                ->post('/update-user-level', [
+                ->patch('/update-user-level', [
                     'user_id' => $user->id,
                     'points' => $user->points,
             ]);
