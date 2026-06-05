@@ -19,7 +19,9 @@ class UserUpdatePointsController extends Controller
             $user->points += $userUpdatePointsRequest->points;
             $user->save();
             DB::commit();
+            $token = $userUpdatePointsRequest->bearerToken();
             Http::baseUrl(config('services.level_service.url'))
+                ->withToken($token)
                 ->patch('/update-user-level', [
                     'user_id' => $user->id,
                     'points' => $user->points,
