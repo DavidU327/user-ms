@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Http;
 
 class UserUpdatePointsController extends Controller
 {
@@ -15,9 +16,14 @@ class UserUpdatePointsController extends Controller
     {
         DB::beginTransaction();
         try {
-            $user->points = $userUpdatePointsRequest->points;
+            $user->points += $userUpdatePointsRequest->points;
             $user->save();
             DB::commit();
+            Http::baseUrl(config('services.level_service.url'))
+                ->post('/update-user-level', [
+                    'user_id' => $user->id,
+                    'points' => $user->points,
+            ]);
             $userResource = UserResource::make($user);
             $data = [
                 'message' => 'Usuario actualizado correctamente',
