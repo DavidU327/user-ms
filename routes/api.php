@@ -10,6 +10,7 @@ Route::middleware(['auth.jwt', 'role:'.Rol::ADMIN])->group(function () {
     Route::post('search', '\App\Http\Controllers\UserSearchController@search')->name('user.search'); //Buscar usuario
     Route::delete('delete_user/{user}', '\App\Http\Controllers\UserDeleteController@delete')->name('user.delete'); //Eliminar usuario
     Route::get('all_users', '\App\Http\Controllers\DashboardsController@allUsers')->name('dashboardUser.index'); //Mostrar total usuarios
+    Route::post('users_by_name', '\App\Http\Controllers\UserIndexController@usersByIds')->name('dashboardByNameUser.index'); //Mostrar nombre de usuario por ids
 });
 
 Route::middleware(['auth.jwt', 'role:'.Rol::ADMIN.','.Rol::RECYCLER])->group(function () {
