@@ -19,6 +19,7 @@ class UserShowResource extends JsonResource
             'name' => $this->name,
             'phone' => $this->phone,
             'photo' => $this->image,
+            'firebase_token' => $this->firebase_token
         ];
     }
 }
