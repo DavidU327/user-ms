@@ -1,0 +1,10 @@
+{
+  "backendStories": [
+    {
+      "id": "general-smoke",
+      "title": "General Smoke",
+      "filter": "ExampleTest",
+      "enabled": true
+    }
+  ]
+}
