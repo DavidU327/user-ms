@@ -1,6 +1,24 @@
 {
   "backendStories": [
     {
+      "id": "hu8-bloquear-usuario",
+      "title": "HU-8 Bloquear usuario",
+      "filter": "UserChangeStateControllerTest",
+      "enabled": true
+    },
+    {
+      "id": "hu8-eliminar-usuario",
+      "title": "HU-8 Eliminar usuario",
+      "filter": "UserDeleteControllerTest",
+      "enabled": true
+    },
+    {
+      "id": "hu9-editar-usuario",
+      "title": "HU-9 Editar usuario",
+      "filter": "UserUpdateControllerTest",
+      "enabled": true
+    },
+    {
       "id": "general-smoke",
       "title": "General Smoke",
       "filter": "ExampleTest",
